@@ -1,4 +1,5 @@
 # OpenAPI Specification FAIR API
+# Author: Manuel Bernal Llinares <mbdebian@gmail.com>
 openapi: 3.0.0
 servers:
   - url: 'http://fairapi.org'
@@ -39,3 +40,5 @@ paths:
           description: The provided LUI is not covered
         '500':
           description: An internal error prevented the request from being completed
+  /healthApi/{readiness_probe}:
+  /healthApi/{liveness_probe}:

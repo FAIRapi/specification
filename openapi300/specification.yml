@@ -1,0 +1,41 @@
+# OpenAPI Specification FAIR API
+openapi: 3.0.0
+servers:
+  - url: 'http://fairapi.org'
+    description: Home URL for FAIR API
+info:
+  description: FAIR API specification is a long term proposal to achieve increased interoperability, findability and accessibility among life sciences resources, by defining a contract related to live concerns, problems and use cases within the community under the FAIR umbrella.
+  version: "1.0"
+  title: FAIR API specification
+  #termsOfService:
+  contact:
+    name: Manuel Bernal Llinares
+    url: https://www.ebi.ac.uk/about/people/manuel-bernal-llinares
+    email: mbdebian@gmail.com
+  license:
+    name: MIT
+    url: 'http://opensource.org/licenses/MIT'
+paths:
+  /coverageApi/{checkCoverageForLui}:
+    get:
+      tags:
+        - coverageApi
+      summary: Check coverage for a particular Locally Unique Identifier (LUI)
+      operationId: coverage_api_check_coverage_for_lui
+      parameters:
+        - in: path
+          name: checkCoverageForLui
+          required: true
+          schema:
+            type: string
+          description: LUI to check for coverage
+          example: p2cg4
+      responses:
+        '200':
+          description: The provided LUI is covered
+        '400':
+          description: The provided LUI does not correspond to this service, i.e. it is not a LUI as understood by the provider (e.g. trying to use a PDB LUI in Ensembl)
+        '404':
+          description: The provided LUI is not covered
+        '500':
+          description: An internal error prevented the request from being completed

@@ -40,5 +40,27 @@ paths:
           description: The provided LUI is not covered
         '500':
           description: An internal error prevented the request from being completed
-  /healthApi/{readiness_probe}:
-  /healthApi/{liveness_probe}:
+  /healthApi/readiness_probe:
+    get:
+      tags:
+        - healthApi
+      summary: This endpoint reports whether the API is ready to accept queries or not
+      operationId: health_api_readiness_probe
+      responses:
+        '200':
+          description: The provider is ready for accepting FAIR API requests
+        '400':
+          description: The provider is not ready for accepting FAIR API requests
+        '500':
+          description: An internal error prevented the request from being completed
+  /healthApi/liveness_probe:
+    get:
+      tags:
+        - healthApi
+      summary: This endpoint reports whether the API is up and running or not
+      operationId: health_api_liveness_probe
+      responses:
+        '200':
+          description: The provider's FAIR API engine is up and running, no response would be a sign of the provider FAIR API engine being down, for any reason
+        '500':
+          description: An internal error prevented the request from being completed

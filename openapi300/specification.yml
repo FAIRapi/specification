@@ -1,36 +1,37 @@
 # OpenAPI Specification FAIR API
 # Author: Manuel Bernal Llinares <mbdebian@gmail.com>
-openapi: 3.0.0
+openapi: 3.0.3
 servers:
-  - url: 'http://fairapi.org'
+  - url: 'https://registry.api.identifiers.org/fairapi'
+    description: FAIR API Implementation at https://identifiers.org
+  - url: 'https://fairapi.org'
     description: Home URL for FAIR API
 info:
+  title: FAIR API specification
   description: FAIR API specification is a long term proposal to achieve increased interoperability, findability and accessibility among life sciences resources, by defining a contract related to live concerns, problems and use cases within the community under the FAIR umbrella.
   version: "1.0"
-  title: FAIR API specification
-  #termsOfService:
+  termsOfService: https://www.ebi.ac.uk/about/terms-of-use/
   contact:
     name: Manuel Bernal Llinares
     url: https://www.ebi.ac.uk/about/people/manuel-bernal-llinares
-    email: mbdebian@gmail.com
+    email: mbernal@ebi.ac.uk
   license:
     name: MIT
     url: 'http://opensource.org/licenses/MIT'
 paths:
-  /coverage/{checkCoverageForLui}:
-    get:
+  /coverage/checkForLui:
+    post:
       tags:
         - coverageApi
       summary: Check coverage for a particular Locally Unique Identifier (LUI)
-      operationId: coverage_api_check_coverage_for_lui
-      parameters:
-        - in: path
-          name: checkCoverageForLui
-          required: true
-          schema:
-            type: string
-          description: LUI to check for coverage
-          example: p2cg4
+      operationId: coverage_api_check_for_lui
+      requestBody:
+        description: Contains the LUI on which the request is being submitted
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FairApiCoverageRequest'
       responses:
         '200':
           description: The provided LUI is covered
@@ -40,6 +41,32 @@ paths:
           description: The provided LUI is not covered
         '500':
           description: An internal error prevented the request from being completed
+  /interoperability/getCompactIdentifier:
+    post:
+      tags:
+        - interoperabilityApi
+      summary: Given a LUI and a namespace scope (optional if the service is a data provider, required if the service is a metaresolver), this method computes the interoperable Compact Identifier version of the given LUI.
+      operationId: interoperability_api_get_compact_identifier
+      requestBody:
+        description: Contains information on the LUI, on which the request is being submitted and,  depending on the implementing service, the namespace context
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FairApiInteroperabilityRequest'
+  /interoperability/getInteroperableUrl:
+    post:
+      tags:
+        - interoperabilityApi
+      summary: Given a LUI and a namespace scope (optional if the service is a data provider, required if the service is a metaresolver), this method computes the interoperable URL for the given LUI.
+      operationId: interoperability_api_get_interoperable_url
+      requestBody:
+        description: Contains information on the LUI, on which the request is being submitted and,  depending on the implementing service, the namespace context
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FairApiInteroperabilityRequest'
   /healthApi/readiness_probe:
     get:
       tags:
@@ -64,3 +91,27 @@ paths:
           description: The provider's FAIR API engine is up and running, no response would be a sign of the provider FAIR API engine being down, for any reason
         '500':
           description: An internal error prevented the request from being completed
+components:
+  schemas:
+    FairApiCoverageRequest:
+      type: object
+      required:
+        - lui
+      properties:
+        lui:
+          type: string
+          example: MIR:00000015
+          description: Locally Unique Identifier on which the request is being submitted
+    FairApiInteroperabilityRequest:
+      type: object
+      required:
+        - lui
+      properties:
+        namespace:
+          type: string
+          example: pdb
+          description: This attribute defines the namespace scope for the request, it is optional for data resources, but mandatory for metaresolvers.
+        lui:
+          type: string
+          example: 2gc4
+          description: Locally Unique Identifier on which the request is being submitted

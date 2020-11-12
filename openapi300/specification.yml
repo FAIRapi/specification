@@ -54,6 +54,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/FairApiInteroperabilityRequest'
+      responses:
+        '200':
+          description: the request was successful and the computed compact identifier can be found in the response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FairApiInteroperabilityResponse'
+        '400':
+          description: the given request information was not valid, and a compact identifier could not be computed
+        '404':
+          description: the given optional namespace and LUI are not supported by this service, and the compact identifier could not be computed
+        '500':
+          description: An internal error prevented the request from being completed
   /interoperability/getInteroperableUrl:
     post:
       tags:
@@ -67,6 +80,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/FairApiInteroperabilityRequest'
+      responses:
+        '200':
+          description: the request was successful and the computed compact identifier can be found in the response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FairApiInteroperabilityResponse'
+        '400':
+          description: the given request information was not valid, and the interoperable URL could not be computed
+        '404':
+          description: the given optional namespace and LUI are not supported by this service, and the interoperable URL could not be computed
+        '500':
+          description: An internal error prevented the request from being completed
   /health/readiness_probe:
     get:
       tags:
@@ -115,3 +141,14 @@ components:
           type: string
           example: 2gc4
           description: Locally Unique Identifier on which the request is being submitted
+    FairApiInteroperabilityResponse:
+      type: object
+      properties:
+        response:
+          type: string
+          example: pdb:2gc4
+          description: results from processing the request submitted to the given endpoint
+        additionalInformation:
+          type: string
+          example: No additional information has been provided
+          description: optional additional information that accompanies the response

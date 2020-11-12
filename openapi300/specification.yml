@@ -9,7 +9,7 @@ servers:
 info:
   title: FAIR API specification
   description: FAIR API specification is a long term proposal to achieve increased interoperability, findability and accessibility among life sciences resources, by defining a contract related to live concerns, problems and use cases within the community under the FAIR umbrella.
-  version: "1.0"
+  version: "2.0"
   termsOfService: https://www.ebi.ac.uk/about/terms-of-use/
   contact:
     name: Manuel Bernal Llinares
@@ -67,7 +67,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/FairApiInteroperabilityRequest'
-  /healthApi/readiness_probe:
+  /health/readiness_probe:
     get:
       tags:
         - healthApi
@@ -80,7 +80,7 @@ paths:
           description: The provider is not ready for accepting FAIR API requests
         '500':
           description: An internal error prevented the request from being completed
-  /healthApi/liveness_probe:
+  /health/liveness_probe:
     get:
       tags:
         - healthApi
